@@ -38,8 +38,6 @@ arguments start and end are interpreted as in slice notation.
 Return -1 on failure.
 ```
 
----------------------------------------------------------------------
-
 Suppose that this is the file `crawl_str.py`
 
 ```python
@@ -151,7 +149,7 @@ True
 'abc'+'xyz'
 'abcxyz'
 ```
-so we can do "algebraic" operations not only on numbers but also on strings and {True, False} in the sense that `and` looks like multiplication on booleans and `+` looks like addition on strings.
+so we can do "algebraic" operations not only on numbers but also on strings and `{True, False}` in the sense that `and` looks like multiplication on booleans and `+` looks like addition on strings.
 
 
 ## more on while loops
@@ -179,7 +177,9 @@ def sup(l):
 
 `sup` stands for "supremum" which is another way of saying "greatest".
 
-## destructuring, or introducing variable names while unpacking structures
+## destructuring
+
+By destructuring we mean that we're introducing variable names while unpacking a more complicated structure.
 
 ```python
 In [1]: l = []
@@ -207,7 +207,7 @@ In [9]: for [x,y,z] in l:
 4 plus two is 6
 ```
 
-Here is a more complicated example, from hw 3 of udacity.
+Here is a more complicated example, from homework 3 of the udacity course.
 
 ```python
 udacious_univs = 'Udacity',90000,0
@@ -414,9 +414,8 @@ def fib(n):
 # Move the largest ring from src to dest
 # Move the n-1 rings from aux to dest (recursively)
 #
-# Let us call our initial three pegs 'A', 'B', 'C' and
-# initially all n rings are on 'A' and we want to move them to
-# 'C'.
+# Let us call our initial three pegs 'A', 'B', 'C' and initially all n rings
+# are on 'A' and we want to move them to 'C'.
 
 def hanoi(n, src, aux, dest):
     if n == 0:
@@ -826,10 +825,6 @@ primes = [x for x in range(2, n) if x not in composites]
 # coding style.
 
 primes = [x for x in range(2, n) if x not in [j for i in range(2, int(sqrt(n))) for j in range(2*i, n, i)]]
-
-primes_ == primes
-
-################################################################################
 ```
 
 ## I/O and sorting algorithms

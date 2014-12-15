@@ -139,21 +139,3 @@ class Rational:
         return str(self.n) + "/" + str(self.d)
     def __float__(self):
         return float(self.n)/float(self.d)
-
-Rational(1,0) # ZeroDivisionError
-Rational(2.5,2) # TypeError
-Rational('a',2) # TypeError
-
-third = Rational(1,3)
-print third # 1/3
-fifth = Rational(1,5)
-print fifth # 1/5
-print third + fifth # 8/15
-print third * fifth # 1/15
-print third-fifth # 2/15
-print fifth/third # 3/5
-
-print float(fifth) # 0.2
-print float(third) # 0.333333333333
-
-print Rational(50,100) # 1/2
