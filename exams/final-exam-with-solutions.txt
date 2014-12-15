@@ -1,0 +1,318 @@
+
+MTH103, Final Exam, 2012-11-22-Thu, 0900-1200. Solutions.
+
+----------------------------------------------------------------------
+
+(1) (4 pts) Let a and b be positive integers. Then a is a power of b
+if it is divisible by b and a/b is a power of b. Write a function
+called is_power that takes parameters a and b and returns True if a is
+a power of b and False otherwise.
+
+def is_power(a, b):
+    if a == 1:
+        return True
+    else:
+        return (a % b) == 0 and is_power(a/b, b)
+
+def test_is_power(b,n):
+    return [is_power(b**i,b) for i in range(n)]
+
+----------------------------------------------------------------------
+
+(2) (4 pts) Write a code fragment that reads in the following data
+from a file 'input.txt' and prints the sum of the numbers. You may use
+the builtin sum function, and for a string s, the method
+s.splitlines() which returns a list of the lines of the string s. To
+be precise, the file input.txt consists of the following 7 lines and
+nothing else.
+
+98
+100
+91
+82
+88
+86
+77
+
+f = open('input.txt', 'r')
+s = f.read()
+f.close()
+sum([int(line) for line in s.splitlines()])
+
+98+100+91+82+88+86+77 == 622
+
+----------------------------------------------------------------------
+
+(3) (6 pts) Write a function digsum(x) which returns the sum of digits
+of a number. For example, the sum of the digits in the number 3628800
+is 3+6+2+8+8+0+0=27.
+
+def digsum(x):
+    l = []
+    i = 0
+    while 10**i <= x:
+        l.append( (x/10**i) % 10 )
+        i = i + 1
+    return sum(l)
+
+The following solutions all use the fact that another way to compute
+the highest power i such that 10**i <= x is as len(str(x)).
+
+def digsum(x):
+    l = []
+    for i in range(len(str(x))):
+        l.append( (x/10**i) % 10 )
+    return sum(l)
+
+def digsum(x):
+    return sum([(x/10**i) % 10 for i in range(len(str(x)))])
+
+def digsum(x):
+    return sum([int(d) for d in list(str(x))])
+
+digsum(3628800) == 27
+
+----------------------------------------------------------------------
+
+(4) (a) (2 pts) Write a function loopmax(l) which returns the maximum element
+of a nonempty list of integers l. Use a loop to do this.
+
+def loopmax(l):
+    max = l[0]
+    for x in l:
+        if x > max:
+            max = x
+    return max
+
+from random import randint
+l = [randint(1,100) for i in range(20)]
+loopmax(l)
+
+(b) (6 pts) Write a recursive function recmax(l) which returns the
+maximum element of a nonempty list of integers l.
+
+def recmax(l):
+    if len(l) == 1:
+        return l[0]
+    possible_max_1 = l[0]
+    possible_max_2 = recmax(l[1:])
+    if possible_max_1 > possible_max_2:
+        return possible_max_1
+    else:
+        return possible_max_2
+
+recmax(l) == loopmax(l)
+
+----------------------------------------------------------------------
+
+(5) (6 pts) After doing a series of experiments, you have compiled a
+dictionary showing the probability of detecting certain kinds of
+subatomic particles. The particles' names are the dictionary's keys,
+and the probabilities are the values:
+
+{'neutron':0.55, 'proton':0.21, 'meson':0.03, 'muon':0.07, 'neutrino':0.14}
+
+Write a function leastlikely(d) that takes a single dictionary of this
+kind as input and returns the particle that is least likely to be
+observed. Given the dictionary shown earlier, for example, the
+function would return 'meson'.
+
+observations = {'neutron':0.55,
+                'proton':0.21,
+                'meson':0.03,
+                'muon':0.07,
+                'neutrino':0.14}
+
+def leastlikely(d):
+    minparticle, minprob = 'unknown', 2
+    for particle, prob in d.items():
+        if prob < minprob:
+            minparticle, minprob = particle, prob
+    return minparticle
+
+leastlikely(observations)
+
+----------------------------------------------------------------------
+
+(6) (6 pts) Programmers sometimes use a dictionary of dictionaries as
+a database. For example, to keep track of information about famous
+scientists, they might use something like this:
+
+scientists = {
+  'jgoodall'  : {'surname'  : 'Goodall',
+                 'forename' : 'Jane',
+                 'born'     : 1934,
+                 'died'     : None,
+                 'notes'    : 'primate researcher',
+                 'author'   : ['In the Shadow of Man',
+                               'The Chimpanzees of Gombe']},
+  'rfranklin' : {'surname'  : 'Franklin',
+                 'forename' : 'Rosalind',
+                 'born'     : 1920,
+                 'died'     : 1957,
+                 'notes'    : 'contributed to discovery of DNA'},
+   'rcarson'  : {'surname'  : 'Carson',
+                 'forename' : 'Rachel',
+                 'born'     : 1907,
+                 'died'     : 1964,
+                 'notes'    : 'raised awareness of effects of DDT',
+                 'author'   : ['Silent Spring']}
+}
+
+Write a function called db_headings that returns the set of keys used
+in any of the inner dictionaries. In this example, the expression
+db_headings(scientists) return set(['author', 'forename', 'surname',
+'notes', 'born', 'died']).
+
+def db_headings(d):
+    result = []
+    for k in d.keys():
+        result = result + d[k].keys()
+    return set(result)
+
+def db_headings(d):
+    return set([inner for outer in d.keys() for inner in d[outer].keys()])
+
+def db_headings(d):
+    return set([inner for outer in d for inner in d[outer]])
+
+db_headings(scientists) == set(['author', 'forename', 'surname',
+'notes', 'born', 'died'])
+
+----------------------------------------------------------------------
+
+(7) A sparse vector is a vector whose entries are almost all zero,
+like [1, 0, 0, 0, 0, 0, 3, 0, 0, 0]. Storing all those zeroes in a
+list wastes memory, so programmers often use dictionaries instead to
+keep track of just the nonzero entries. For example, the vector shown
+earlier would be represented as {0:1, 6:3}, since the vector it is
+meant to represent has the value 1 at index 0 and the value 3 at index
+6.
+
+(a) (6 pts) The sum of two vectors is the element-wise sum of their
+elements.  For example, the sum of [1, 2, 3] and [4, 5, 6] is [5, 7,
+9]. Write a function called sparse_add that takes two sparse vectors
+stored as dictionaries and returns a sparse vector representing their
+sum.
+
+def sparse_add(v,w):
+    sum = dict()
+    for i in v.keys():
+        if not w.has_key(i):
+            sum[i] = v[i]
+    for j in w.keys():
+        if not v.has_key(j):
+            sum[j] = w[j]
+    for i in v.keys():
+        if w.has_key(i):
+            sum[i] = v[i]+w[i]
+    return sum
+
+x = {0:1, 6:3}
+y = {0:3, 10:20}
+
+In [69]: sparse_add(x,y)
+Out[69]: {0: 4, 6: 3, 10: 20}
+In [70]: sparse_add(y,y)
+Out[70]: {0: 6, 10: 40}
+In [71]: sparse_add(x,{})
+Out[71]: {0: 1, 6: 3}
+
+(b) (4 pts) The dot product of two vectors is the sum of the products
+of corresponding elements. For example, the dot product of [1, 2, 3]
+and [4, 5, 6] is 4+10+18, or 32. Write another function called
+sparse_dot that calculates the dot product of two sparse vectors.
+
+def sparse_dot(v,w):
+    prod = 0
+    for i in v.keys():
+        if w.has_key(i):
+            prod = prod + v[i]*w[i]
+    return prod
+
+In [72]: sparse_dot(x,y)
+Out[72]: 3
+In [73]: sparse_dot(y,y)
+Out[73]: 409
+In [74]: sparse_dot(x,{})
+Out[74]: 0
+
+----------------------------------------------------------------------
+
+(8) (10 pts) We want to define a class SparseVec which implements a
+sparse vector as defined in problem 7 which has the following three
+properties:
+
+(i) A SparseVec should be initialized by a dictionary as follows:
+    v = SparseVec({0:1, 6:3})
+
+(ii) Suppose we are given two SparseVec instances v and w. We want v+w
+to be a SparseVec instance which represents their vector sum.
+
+(iii) We want v*w to be a number which represents the dot product of v
+and w.
+
+Define a class SparseVec which achieves these three goals. You may use
+the functions sparse_add and sparse_dot from problem 7 even if you
+couldn't solve that problem.
+
+class SparseVec:
+    def __init__(self, initial_dict):
+        self.d = initial_dict
+    def __add__(self, other):
+        return SparseVec(sparse_add(self.d, other.d))
+    def __mul__(self, other):
+        return sparse_dot(self.d, other.d)
+    def __str__(self):
+        return str(self.d)
+
+v = SparseVec({0:1, 6:3})
+w = SparseVec({0:3, 10:20})
+
+In [63]: print v+w
+{0: 4, 10: 20, 6: 3}
+In [64]: print w+w
+{0: 6, 10: 40}
+In [65]: print v*w
+3
+In [66]: print w*w
+409
+
+----------------------------------------------------------------------
+
+(9) (4 pts) Show the merge-sort tree for the list L = [1, 9, 5, 2, 0,
+3, 4, 6, 8, 7]. Here is an example of a merge-sort tree, where the
+top-half represents the split phase and the bottom half the merge
+phase.
+
+----------------------------------------------------------------------
+
+(10) (a) (4 pts) Use the builtin function sum and a list comprehension
+to write a one line function f which does the following.
+
+    Given N > 0 and a two positive integers a < b < N, f returns the
+    sum of all multiples of elements of a and b < N.
+
+You are required to use only one line of code to solve this problem.
+
+def f(a,b,N):
+    return sum([x for x in range(N) if x % a == 0 or x % b == 0])
+
+From Project Euler problem 1: If we list all the natural numbers below
+10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of
+these multiples is 23.
+
+f(3,5,10) == 23
+
+(b) (2 pts) Write the same function using loops. You may use any
+number of lines of code.
+
+def f(a,b,N):
+    l = []
+    for x in range(N):
+        if x % a == 0 or x % b == 0:
+            l.append(x)
+    return sum(l)
+
+f(3,5,10) == 23
+
