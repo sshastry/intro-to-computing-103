@@ -57,7 +57,8 @@ before you try to
 """
 ```
 
-Then we can load it into the interpreter with `ipython -i crawl_str.py` or `python -i crawl_str.py`.
+Then we can load it into the interpreter with `ipython -i crawl_str.py` or
+`python -i crawl_str.py`.
 
 ## mutable vs immutable
 
@@ -65,13 +66,16 @@ If we write
 ```python
 L = [1,2,3]
 ```
-then we can think of the name L is an arrow pointing to an object in (a Platonic) space holding `[1,2,3]`. If we execute
+then we can think of the name L is an arrow pointing to an object in (a
+Platonic) space holding `[1,2,3]`. If we execute
 ```python
 L[1] = 100
 ```
 then `L` is `[1,100,3]`
 
-If we execute `M = L` then `M` is an arrow to the same object in space. Therefore a change to `M[1]` is a change to the object in space, and therefore that change is reflected in `L`.
+If we execute `M = L` then `M` is an arrow to the same object in space.
+Therefore a change to `M[1]` is a change to the object in space, and therefore
+that change is reflected in `L`.
 
 However if we write
 ```python
@@ -79,7 +83,9 @@ L = L + [4,5,6]
 ```
 then `L` becomes an arrow to a new object in space.
 
-This is a convention of python, that reaching into the index of the list changes the object in space, but any other operation on the list creates a new list.
+This is a convention of python, that reaching into the index of the list
+changes the object in space, but any other operation on the list creates a new
+list.
 
 Now consider
 ```python
@@ -101,9 +107,11 @@ reaches into space
 
 but other operations such as `L = L + [10]`, create a new object in space.
 
-Therefore the behavior of an operation reflects the fact of whether or not it modifies the object in space or it creates a new object.
+Therefore the behavior of an operation reflects the fact of whether or not it
+modifies the object in space or it creates a new object.
 
-Always ask when doing an operation of any kind on a variable x, "Am I modifying the object in space, or am I creating a new object?"
+Always ask when doing an operation of any kind on a variable x, "Am I modifying
+the object in space, or am I creating a new object?"
 
 ## for and while loops
 
@@ -138,7 +146,8 @@ Out[1]: ['h', 'ee', 'lll', 'llll', 'ooooo']
 
 ## the algebra of boolean values
 
-Recall from last week: one always has to ask "Am I creating a new object, or am I modifying an existing object?"
+Recall from last week: one always has to ask "Am I creating a new object, or am
+I modifying an existing object?"
 
 We can also do
 ```python
@@ -149,8 +158,9 @@ True
 'abc'+'xyz'
 'abcxyz'
 ```
-so we can do "algebraic" operations not only on numbers but also on strings and `{True, False}` in the sense that `and` looks like multiplication on booleans and `+` looks like addition on strings.
-
+so we can do "algebraic" operations not only on numbers but also on strings and
+`{True, False}` in the sense that `and` looks like multiplication on booleans
+and `+` looks like addition on strings.
 
 ## more on while loops
 
@@ -179,7 +189,8 @@ def sup(l):
 
 ## destructuring
 
-By destructuring we mean that we're introducing variable names while unpacking a more complicated structure.
+By destructuring we mean that we're introducing variable names while unpacking
+a more complicated structure.
 
 ```python
 In [1]: l = []
@@ -233,7 +244,8 @@ Note the line
 ```python
     for [univ,students,fees] in l:
 ```
-In earlier languages such as Java or C++, doing the same thing would take considerably more code.
+In earlier languages such as Java or C++, doing the same thing would take
+considerably more code.
 
 ## recursion
 
@@ -286,7 +298,8 @@ n + m
 add(n,m)
 ```
 
-If we knew how to add one to an integer, we could use that as the base case of the recursion.
+If we knew how to add one to an integer, we could use that as the base case of
+the recursion.
 
 ```python
 def addone(n):
@@ -334,7 +347,8 @@ def nondestructiveloopfindmax(L):
 ```
 (We forgot to find a recursive version!)
 
-(4) Can we define the fibonacci numbers recursively? Yes, the mathematical definition is recursive.
+(4) Can we define the fibonacci numbers recursively? Yes, the mathematical
+definition is recursive.
 
 ```
 F(0) = 0
@@ -356,13 +370,15 @@ def fib(n):
         return fib(n-1)+fib(n-2)
 ```
 
-This is correct but it performs very slowly. We'll try to make it run faster in the next lecture.
+This is correct but it performs very slowly. We'll try to make it run faster in
+the next lecture.
 
 ## more on recursion
 
+The following definition is extremely inefficient as it computes the same
+values over and over again needlessly.
+
 ```python
-# this definition procedure is extremely inefficient as it computes the same
-# values over and over again needlessly.
 def F(n):
     if type(n) != int or n < 0:
         print "error"
@@ -374,25 +390,25 @@ def F(n):
         return 1
     if n > 1:
         return F(n-1)+F(n-2)
+```
 
-# Let us define a global variable, a list memo which will store the previously
-# calculated values of fib. We will use the fact that
-# fib(n) > 0 for all n > 0
-# We need to initialize the memo list to be zeroes, up to some predefined maximum
-# value, so we are not allowed to compute fib(N) for N > MAX.
-#
-# this technique is called "dynamic programming" or "memoization"
+Let us define a global variable, a list `memo` which will store the previously
+calculated values of fib. We will use the fact that
+> fib(n) > 0 for all n > 0
+We need to initialize the memo list to be zeroes, up to some predefined maximum
+value and therefore we cannot call `fib(N)` for `N > MAX`.
 
+This technique is called "dynamic programming" or "memoization."
+
+```python
 MAX = 1000
 memo = MAX * [0]
 memo[0] = 0
 memo[1] = 1
 
 def fib(n):
-    # this is the logical test which tells us
-    # whether or not we've already computed fib(n)
-    # and therefore saves us from redundant
-    # computation
+    # this is the logical test which tells us whether or not we've already
+    # computed fib(n) and therefore saves us from redundant computation
     if n == 0 or n == 1 or memo[n] > 0:
         return memo[n]
 
@@ -402,21 +418,22 @@ def fib(n):
 
 ## The Towers of Hanoi
 
-```python
-# We are given three pegs
-# The first (source) peg holds a number of rings
-# You want to move all rings to the last (destination) peg
-# You can only move one ring at a time
-# You can never put a larger ring on top of a smaller ring
-# You have one auxiliary peg you can use
-#
-# Move the top n-1 rings from src to aux (recursively)
-# Move the largest ring from src to dest
-# Move the n-1 rings from aux to dest (recursively)
-#
-# Let us call our initial three pegs 'A', 'B', 'C' and initially all n rings
-# are on 'A' and we want to move them to 'C'.
+We are given three pegs
+* The first (source) peg holds a number of rings
+* You want to move all rings to the last (destination) peg
+* You can only move one ring at a time
+* You can never put a larger ring on top of a smaller ring
+* You have one auxiliary peg you can use
 
+The algorithm to solve this problem is:
+* Move the top n-1 rings from src to aux (recursively)
+* Move the largest ring from src to dest
+* Move the n-1 rings from aux to dest (recursively)
+
+Let us call our initial three pegs 'A', 'B', 'C' and suppose that initially all
+n rings are on 'A' and our goal is to move them to 'C'.
+
+```python
 def hanoi(n, src, aux, dest):
     if n == 0:
         return
@@ -431,37 +448,39 @@ def hanoi(n, src, aux, dest):
 
 hanoi(4, 'A', 'B', 'C')
 ```
-Now let's try a more complicated recursion which produces all permutations of a given string.
-```python
-# A permutation of a string s is a string t in which each character of s appears
-# once and only once in t
-# s = aab, then t = aba is a permutation.
-# s = xyz, then t = zxy is a permutation.
-#
-# Problem:
-# given a string, construct a list of all possible permutations of that string.
-#
-# Example:
-# given ABC we want the list
-# ['ABC','ACB','BAC','BCA','CAB','CBA']
-#
-# This reminds you of the recursive defn of factorial fact(n) is defined in terms
-# of smaller factorials this suggests that the list of all permutations could be
-# defined in terms of smaller permutations.
-#
-# To find all permutations of n objects:
-# For a given object
-# Find all permutations of n-1 objects
-# Insert the given object into all possible positions
-# of each permutation of n-1 objects
-#
-# Example: given ABC
-# Find all permutations of BC
-#   BC and CB
-# Insert the remaining object A into all possible positions
-# marked by a *, in each of the permutations of BC
-#   *B*C* and *C*B*
+Now let's try a more complicated recursion which produces all permutations of a
+given string.
 
+A permutation of a string s is a string t in which each character of s appears
+once and only once in t. Examples:
+* if s = aab, then t = aba is a permutation.
+* if s = xyz, then t = zxy is a permutation.
+
+Problem:
+> given a string, construct a list of all possible permutations of that string.
+
+Example: given ABC we want our function to return the list
+```
+['ABC','ACB','BAC','BCA','CAB','CBA']
+```
+
+This should remind you of how the recursive definition of factorial fact(n) is
+defined in terms of smaller factorials. This suggests that the list of all
+permutations could be defined in terms of smaller permutations.
+
+To find all permutations of n objects:
+* Fix one of the n objects, let's call it alpha
+* Find all permutations of n-1 other objects
+* Insert the alpha into all possible positions of each permutation of n-1
+  objects
+
+Example:
+* given ABC
+* all permutations of BC are [BC, CB]
+* Insert the remaining object A into all possible positions marked by a `*`, in
+  each of the permutations of BC: `*B*C*` and `*C*B*`
+
+```python
 def insert_at_all_positions(c, t):
     l = []
     for j in range(len(t)+1): # + 1 for the rightmost spot
@@ -538,35 +557,35 @@ time_execution("hanoi_(23, 'A', 'B', 'C')") # 3.43s
 
 ## dictionaries
 
-```python
-# Example Program: Word Frequency
-#
-# Let's write a program that analyzes text documents and counts how many times
-# each word appears in the document.  This kind of analysis is sometimes used to
-# measure the similarity between two documents.
-#
-# We will use a dictionary counts with keys the words in the document and values
-# the number of times the word appears in the document.
+### Example Program: Word Frequency
 
+Let's write a program that analyzes text documents and counts how many times
+each word appears in the document.  This kind of analysis is sometimes used to
+measure the similarity between two documents.
+
+We will use a dictionary counts with keys the words in the document and values
+the number of times the word appears in the document.
+
+```python
 f = open('rfc2822.txt', 'r')
 text = f.read()
 f.close()
-
-# There is one small complication with using a dictionary here. The first time we
-# encounter a word, it will not yet be in counts. Attempting to access a
-# non-existent key produces an error. To guard against this, we need a decision
-# in our algorithm.
-
-# if w is already in counts:
-#     add one to the count for w
-# else:
-#     set count for w to 1
-
-# The first task is to split our text document into a sequence of words. In the
-# process, we will also convert all the text to lowercase (so occurrences of
-# "Foo" match "foo") and eliminate punctuation (so "foo," matches "foo"). Here's
-# the code to do that:
-
+```
+There is one small complication with using a dictionary here. The first time we
+encounter a word, it will not yet be in counts. Attempting to access a
+non-existent key produces an error. To guard against this, we need a decision
+in our algorithm which looks like this:
+```
+if w is already in counts:
+    add one to the count for w
+else:
+    set count for w to 1
+```
+Our first task is to split our text document into a sequence of words. In the
+process, we will also convert all the text to lowercase (so occurrences of
+"Foo" match "foo") and eliminate punctuation (so "foo," matches "foo"). Here's
+the code to do that:
+```python
 # convert all letters to lower case
 text = text.lower()
 
@@ -582,11 +601,13 @@ for w in words:
         counts[w] = counts[w] + 1
     else:
         counts[w] = 1
+```
 
-# Our last step is to print a report that summarizes the contents of counts.
-# One approach might be to print out the list of words and their associated
-# counts in alphabetical order.
+The last step is to print a report that summarizes the contents of counts. One
+approach might be to print out the list of words and their associated counts in
+alphabetical order.
 
+```python
 # get list of words that appear in document
 uniqueWords = counts.keys()
 
@@ -596,11 +617,13 @@ uniqueWords.sort()
 # print words and associated counts
 for w in uniqueWords:
     print w, counts[w]
+```
 
-# For a large document, this won't be useful. There will be too many words, most
-# of which only appear a few times.  More interesting is to print out the counts
-# for the n most frequent words in the document.
+For a large document, this won't be useful. There will be too many words, most
+of which only appear a few times. More interesting is to print out the counts
+for the n most frequent words in the document.
 
+```python
 items = counts.items()
 
 # this doesn't give what we want, which is a ranking by the number of times a
@@ -636,36 +659,36 @@ items.sort(compareItems)
 # Then the top 10 most frequent words are
 items[:10]
 ```
+The function `compareItems` is known as a lexicographic order.
 
 ## list comprehensions
 
-```python
-# References for today's lecture:
-# (1) http://docs.python.org/tutorial/
-# (2) http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
-#
-# In mathematics we can write the following:
-#
-# S = { x*x for x in {0,1,...,9} }
-# V = {1, 2, 4, 8,..., 1024}
-# M = { x : x in S and x is even }
-#
-# In mathematics these are called set comprehensions, also known as set builder
-# notation.
-#
-# In python we can write the following:
+References for today's lecture:
+* http://docs.python.org/tutorial/
+* http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
 
+In mathematics we can write the following:
+```
+S = { x*x for x in {0,1,...,9} }
+V = {1, 2, 4, 8,..., 1024}
+M = { x : x in S and x is even }
+```
+In mathematics these are called set comprehensions, and the notation is
+sometimes called set builder notation. In python we can write the following:
+```python
 S = [x**2 for x in range(10)]
 V = [2**i for i in range(11)]
 M = [x for x in S if x % 2 == 0]
+```
+These are called list comprehensions.
 
-# These are called list comprehensions.
-#
-# Python does have sets and set comprehensions as well, but I won't discuss
-# these. We've already covered the difference between sets and lists.
-#
-# Let's just do a lot of examples and see the equivalent code using loops.
+Python does have sets and set comprehensions as well, but I won't discuss
+these. We've already covered the difference between sets and lists.
 
+Let's just do a lot of examples and compare with the equivalent code written in
+terms of loops.
+
+```python
 ################################################################################
 
 squares = []
@@ -731,34 +754,35 @@ freshfruit = ['  banana', '  loganberry ', 'passion fruit  ']
 # flatten a list using a listcomp with two 'for'
 vec = [[1,2,3], [4,5,6], [7,8,9]]
 [num for elem in vec for num in elem]
+```
 
-################################################################################
+### Nested List Comprehensions
 
-# Nested List Comprehensions
-#
-# The initial expression in a list comprehension can be any arbitrary expression,
-# including another list comprehension.
+The initial expression in a list comprehension can be any arbitrary expression,
+including another list comprehension.
 
-# Consider the following example of a 3x4 matrix implemented as a list of 3
-# lists of length 4:
+Consider the following example of a 3x4 matrix implemented as a list of 3 lists
+of length 4:
 
+```
 matrix = [ [1,  2,  3,  4],
            [5,  6,  7,  8],
            [9, 10, 11, 12] ]
+```
 
-
-# The following list comprehension will transpose rows and columns:
-
+The following list comprehension will transpose rows and columns:
+```python
 [[row[i] for row in matrix] for i in range(4)]
-
-# This example is equivalent to:
-
+```
+This example is equivalent to:
+```python
 transposed = []
 for i in range(4):
     transposed.append([row[i] for row in matrix])
+```
+which, in turn, is the same as:
 
-# which, in turn, is the same as:
-
+```python
 transposed = []
 for i in range(4):
     # the following 3 lines implement the nested listcomp
@@ -766,37 +790,35 @@ for i in range(4):
     for row in matrix:
         transposed_row.append(row[i])
     transposed.append(transposed_row)
+```
 
-################################################################################
-
+Another example:
+```python
 words = "The quick brown fox jumps over the lazy dog".split()
 stuff = [[w.upper(), w.lower(), len(w)] for w in words]
+```
 
-################################################################################
-#
-# The Sieve of Eratosthenes
-#
-# A prime number is a natural number which has exactly two distinct natural
-# number divisors: 1 and itself.
-#
-# To find all the prime numbers less than or equal to a given integer n by
-# Eratosthenes' method:
-#
-# 1. Create a list of consecutive integers from 2 to n: (2, 3, 4, ..., n).
-#
-# 2. Initially, let p equal 2, the first prime number.
-#
-# 3. Starting from p, count up in increments of p and mark each of these numbers
-#    greater than p itself in the list. These numbers will be 2p, 3p, 4p, etc.;
-#    note that some of them may have already been marked.
-#
-# 4. Find the first number greater than p in the list that is not marked. If
-#    there was no such number, stop. Otherwise, let p now equal this number
-#    (which is the next prime), and repeat from step 3.
-#
-# When the algorithm terminates, all the numbers in the list that are not
-# marked are prime.
+### The Sieve of Eratosthenes
 
+A prime number is a natural number which has exactly two distinct natural
+number divisors: 1 and itself.
+
+To find all the prime numbers less than or equal to a given integer n by
+Eratosthenes' method:
+
+0. Create a list of consecutive integers from 2 to n: (2, 3, 4, ..., n).
+0. Initially, let p equal 2, the first prime number.
+0. Starting from p, count up in increments of p and mark each of these numbers
+   greater than p itself in the list. These numbers will be 2p, 3p, 4p, etc.;
+   note that some of them may have already been marked.
+0. Find the first number greater than p in the list that is not marked. If
+   there was no such number, stop. Otherwise, let p now equal this number
+   (which is the next prime), and repeat from step 3.
+
+When the algorithm terminates, all the numbers in the list that are not marked
+are prime.
+
+```python
 from math import sqrt
 n = 1000
 
@@ -892,13 +914,15 @@ import math
 table = {'Sjoerd': 4127, 'Jack': 4098, 'Dcab': 7678}
 for key, value in table.items():
     print '{name:10} ==> {phone:10d}'.format(name=key, phone=value)
+```
 
-# Bubble sort
+### Bubble sort
 
-# Bubble sort is a simple sorting algorithm that works by repeatedly stepping
-# through the list to be sorted, comparing each pair of adjacent items and
-# swapping them if they are in the wrong order.
+Bubble sort is a simple sorting algorithm that works by repeatedly stepping
+through the list to be sorted, comparing each pair of adjacent items and
+swapping them if they are in the wrong order.
 
+```python
 def bubblesort(l):
     swapped = True
     while swapped:
@@ -910,39 +934,41 @@ def bubblesort(l):
     return l
 
 bubblesort([3, 8, 0, 6, 7, 4, 2, 1, 9, 5])
+```
+### Mergesort
 
-# Mergesort
-#
-# Here is a general pattern for solving problems recursively.  It doesn't always
-# work out so simply but this describes many problems.
-#
-#     Divide the input into two pieces of equal size, solve the
-#     two subproblems on these pieces seperately by recursion, and
-#     then combine the two results into a complete solution.
-#
-# Now we want to apply this principle to the problem of sorting as follows.
-#
-# Suppose we had two sorted stacks of cards, say with numbers written on them. To
-# combine the two stacks into one we can proceed as follows. Each stack has the
-# smallest element on top. Whichever of the top values is the smallest is the
-# first element of the combined list.
-#
-# Once the smaller card is removed, we look at the tops of the stacks again and
-# whichever is the smaller value will be the next item in the combined list. We
-# continue this process until both lists are exhausted.
-#
-# This process is called the "merging" of two sorted lists.
-#
-# Now that we know how to merge, we can apply the principle to sort a list of
-# numbers, nums:
+Here is a general pattern for solving problems recursively.  It doesn't always
+work out so simply but this description is still useful.
 
-# mergesort nums:
-#     split nums into two halves
-#     mergesort the first half
-#     mergesort the second half
-#     merge the two sorted halves into a list result
-#     return result
+> Divide the input into two pieces of equal size, solve the two subproblems on
+> these pieces seperately by recursion, and then combine the two results into a
+> complete solution.
 
+We want to apply this principle to the problem of sorting as follows.
+
+Suppose we had two sorted stacks of cards, say with numbers written on them. To
+combine the two stacks into one we can proceed as follows. Each stack has the
+smallest element on top. Whichever of the top values is the smallest is the
+first element of the combined list.
+
+Once the smaller card is removed, we look at the tops of the stacks again and
+whichever is the smaller value will be the next item in the combined list. We
+continue this process until both lists are exhausted. (This process is called
+the "merging" of two sorted lists.)
+
+Now that we know how to merge, we can apply the principle to sort a list of
+numbers, nums:
+
+```
+mergesort nums:
+    split nums into two halves
+    mergesort the first half
+    mergesort the second half
+    merge the two sorted halves into a list result
+    return result
+```
+
+```python
 def merge(left, right):
     result = []
     i, j = 0, 0
@@ -979,7 +1005,7 @@ class MyFirstClass:
 class Point:
     pass
 
-# The Point class has no data or behaviors. We must add attributes.
+# The Point class has no data or behavior. We must add attributes.
 
 p1 = Point()
 p2 = Point()
